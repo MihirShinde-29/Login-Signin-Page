@@ -3,8 +3,7 @@ import { makeStyles } from '@mui/styles';
 import { 
     Box, 
     Typography, 
-    TextField, 
-    
+    TextField,
     Grid, 
     Button, 
     Checkbox, 
@@ -76,7 +75,7 @@ export const Login = () => {
             </Box>
             <Grid container alignItems="center">
                 <Grid item xs={12} md={6}>
-                    <Box textAlign='left' minWidth='300px' mb='5px' pr={md ? '20px' : ''}>
+                    <Box textAlign='left' mb='5px' pr={md ? '20px' : ''}>
                         <form noValidate autoComplete="off">
                             <Box>
                                 <TextField
@@ -87,6 +86,7 @@ export const Login = () => {
                                     helperText={!values.id ? (id.current === 'null' ? 'Enter Email or Phone number' : 'Email or Phone Number is not registered') : ' '}
                                     fullWidth
                                     size='small'
+                                    autoFocus
                                     error={!values.id}
                                     onChange={e => {id.current = e.target.value}}
                                 />
@@ -118,7 +118,7 @@ export const Login = () => {
                                     />
                                 </Box>
                                 <Box>
-                                    <Link className={classes.link} variant='subtitle2'>Forgot password?</Link>
+                                    <Link className={classes.link} variant='subtitle2' to='#'>Forgot password?</Link>
                                 </Box>
                             </Box>
                             <Box mt='4px'>
@@ -135,7 +135,7 @@ export const Login = () => {
                             <Divider variant="middle" />
                         </Box>
                     )}
-                    <Box minWidth='300px' py='10px' pl={md ? '20px' : ''} style={md ? {borderLeft: "grey solid 1px"} : {}}>
+                    <Box py='10px' pl={md ? '20px' : ''} style={md ? {borderLeft: "grey solid 1px"} : {}}>
                         <Box mb='5px'>
                             <Typography variant='h6'>or Login with...</Typography>
                         </Box>

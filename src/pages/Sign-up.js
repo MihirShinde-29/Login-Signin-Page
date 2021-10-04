@@ -79,7 +79,7 @@ export const SignUp = () => {
                 <Typography variant={sm ? 'h3' : 'h4'}>Create Account</Typography>
                 <Typography variant={sm ? 'subtitle1' : 'subtitle2'}>Already have an account? <Link className={classes.link} to='/login'>Log in</Link></Typography>
             </Box>
-            <Box minWidth={md ? '700px' : ''} mb='5px' mt='30px'>
+            <Box width="100%" mb='5px' mt='30px'>
                 <form noValidate autoComplete="off">
                     <Box display='flex'>
                         <Box mr='10px' width='100%'>
@@ -91,6 +91,7 @@ export const SignUp = () => {
                                 helperText={!values.fname ? 'Enter your First Name' : ' '}
                                 fullWidth
                                 size='small'
+                                autoFocus
                                 error={!values.fname}
                                 onChange={e => {fname.current = e.target.value}}
                             />
@@ -171,7 +172,7 @@ export const SignUp = () => {
                 <Box my='20px'>
                     <Divider variant="middle" />
                 </Box>
-                <Box textAlign='center' mb='20px'>
+                <Box textAlign='center' mb='30px'>
                     <Box mb='20px'>
                         <Typography variant='h6'>or Sign up with...</Typography>
                     </Box>
