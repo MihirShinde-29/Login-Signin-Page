@@ -38,14 +38,14 @@ function App() {
         </Route>
         <Route path='/login' exact>
           <Box height={md ? '100vh' : '100%'}>
-            <Grid container direction='column' alignItems='center' spacing={0}>
+            <Grid container direction='column' alignItems='center' spacing={0} height='100%'>
               <Grid item>
                 <Box my={sm ? '40px' : '20px'}>
                   <Typography variant={sm ? 'h2' : 'h4'} color='secondary'>Website</Typography>
                 </Box>
               </Grid>
-              <Grid item>
-                <Box textAlign='center' borderRadius={2} pt={sm ? '40px' : '25px'} pb='10px' px={sm ? '50px' : '20px'} className={classes.box} width={md ? '50vw' : '80vw'}>
+              <Grid item height='60%'>
+                <Box textAlign='center' borderRadius={2} pt={sm ? '40px' : '25px'} pb='10px' px={sm ? '50px' : '20px'} className={classes.box} width={md ? '50vw' : '80vw'} height={md ? '90%' : ''}>
                   <Login />
                 </Box>
               </Grid>
@@ -54,14 +54,14 @@ function App() {
         </Route>
         <Route path='/sign-up' exact>
           <Box height={md ? '100vh' : '100%'}>
-            <Grid container direction='column' alignItems='center' spacing={0}>
+            <Grid container direction='column' alignItems='center' spacing={0} height='100%'>
               <Grid item>
                 <Box my={sm ? '40px' : '20px'}>
                   <Typography variant={sm ? 'h2' : 'h4'} color='secondary'>Website</Typography>
                 </Box>
               </Grid>
-              <Grid item>
-                <Box textAlign='center' borderRadius={2} pt={sm ? '40px' : '25px'} pb='10px' px={sm ? '50px' : '20px'} className={classes.box} width={md ? '50vw' : '80vw'}>
+              <Grid item height='60%'>
+                <Box textAlign='center' borderRadius={2} pt={sm ? '40px' : '25px'} pb='10px' px={sm ? '50px' : '20px'} className={classes.box} width={md ? '50vw' : '80vw'} height={md ? '90%' : ''}>
                   <SignUp />
                 </Box>
               </Grid>

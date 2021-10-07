@@ -7,7 +7,6 @@ import {
     Button, 
     Checkbox, 
     FormControlLabel,
-    Divider, 
     useMediaQuery, 
     useTheme,
 } from '@mui/material';
@@ -36,150 +35,163 @@ export const SignUp = () => {
     const sm = useMediaQuery(theme.breakpoints.up('sm'));
 
     const regexEmail = /^((([a-zA-Z0-9\.]+)@([a-z]+)\.(([a-z]{2,5}\.[a-z]{2,3})|([a-z]{2,5})))|(\d{10}))/g
-    const regexPass = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/g
+    const regexPass = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,16}$/g
+    const regexName = /^([a-zA-Z]{2,})/g
 
-    const fname = useRef('null');
-    const lname = useRef('null');
-    const pass = useRef('null');
-    const confirmPass = useRef();
-    const email = useRef('null');
-    const checked = useRef(false);
     const [values, setValues] = useState({
-        fname: true,
-        lname: true,
-        email: true,
-        pass: true,
-        confirmPass: true,
-        checked: true,
+        name: '',
+        email: '',
+        pass: '',
+        confirmPass: '',
+        checked: false,
         count: 0,
         title: 1
     });
+
+    const [valid, setValid] = useState({
+        name: true,
+        email: true,
+        pass: true,
+        confirmPass: true,
+        checked: true
+    });
+
     const[load, setLoad] = useState(false)
 
-    useEffect(() => {
-        setLoad(fname.current !== 'null' && lname.current !== 'null' && regexPass.test(pass.current) && pass.current !== 'null' && regexEmail.test(email.current) && confirmPass.current === pass.current && checked.current)
-    }, [values])
-
-    const check = () => {
+    const handleChange = e => {
+        if(e.target.name === 'checked') {
+            setValues({
+                ...values,
+                [e.target.name]: (e.target.value === 'on') ? true : false
+            })
+        }
         setValues({
-            fname: fname.current !== 'null',
-            lname: lname.current !== 'null',
-            pass: regexPass.test(pass.current) && pass.current !== 'null', 
-            email: regexEmail.test(email.current),
-            confirmPass: confirmPass.current === pass.current || pass.current === 'null',
-            checked: checked.current,
-            count: values.count+1,
-            title: 1
+            ...values,
+            [e.target.name]: e.target.value
         })
     }
 
+    const handleCheck = () => {
+        setLoad(
+            regexPass.test(values.pass) && regexEmail.test(values.email) && regexName.test(values.name) && values.checked && (values.pass === values.confirmPass)
+        );
+        setValid({
+            name: regexName.test(values.name) && (values.name !== ''),
+            email: regexEmail.test(values.email),
+            pass: regexPass.test(values.pass),
+            confirmPass: (values.pass === values.confirmPass && values.confirmPass !== ''),
+            checked: values.checked
+        })
+        setValues({
+            count: values.count + 1,
+        })
+        console.log(regexPass.test(values.pass) && regexEmail.test(values.email) && regexName.test(values.name) && values.checked && (values.pass === values.confirmPass));
+    }
+
+    useEffect(() => {
+        if (values.count !== 0) {
+            setValid({
+                name: regexName.test(values.name),
+                email: regexEmail.test(values.email),
+                pass: regexPass.test(values.pass),
+                confirmPass: (values.pass === values.confirmPass && values.confirmPass !== ''),
+                checked: values.checked
+            })
+            console.log(valid);
+        }
+    }, [values.name, values.email, values.pass, values.confirmPass, values.checked])
+
     return (
-        <Box textAlign='left'>
+        <Box textAlign='left' mt='-5px'>
             <Box display='flex' flexDirection={md ? 'row' : 'column'} justifyContent='space-between' alignItems='center'>
-                <Typography variant={sm ? 'h3' : 'h4'}>Create Account</Typography>
-                <Typography variant={sm ? 'subtitle1' : 'subtitle2'}>Already have an account? <Link className={classes.link} to='/login'>Log in</Link></Typography>
+                <div>
+                    <Typography variant={sm ? 'h3' : 'h5'}>Create Account</Typography>
+                    <Typography variant={sm ? 'subtitle1' : 'subtitle2'}>Already have an account? <Link className={classes.link} to='/login'>Log in</Link></Typography>
+                </div>
+                <Box width='30%'>
+                    <Button color="secondary" size='large' variant='contained' endIcon={<EmailIcon size='small' />} className={classes.button}>Sign in with Google</Button>
+                </Box>
             </Box>
-            <Box width="100%" mb='5px' mt='30px'>
+            <Box width='100%' mt='12px'>
                 <form noValidate autoComplete="off">
-                    <Box display='flex'>
-                        <Box mr='10px' width='100%'>
-                            <TextField
-                                id="outlined-number"
-                                label="First Name"
-                                type="text"
-                                variant="outlined"
-                                helperText={!values.fname ? 'Enter your First Name' : ' '}
-                                fullWidth
-                                size='small'
-                                autoFocus
-                                error={!values.fname}
-                                onChange={e => {fname.current = e.target.value}}
-                            />
-                        </Box>
-                        <Box ml='10px' width='100%'>
-                            <TextField
-                                id="outlined-number"
-                                label="Last Name"
-                                type="text"
-                                variant="outlined"
-                                helperText={!values.lname ? 'Enter your Last Name' : ' '}
-                                fullWidth
-                                size='small'
-                                error={!values.lname}
-                                onChange={e => {lname.current = e.target.value}}
-                            />
-                        </Box>
+                    <Box width='100%'>
+                        <TextField
+                            id="outlined-number"
+                            label="Enter Name"
+                            type="text"
+                            variant="outlined"
+                            helperText={!valid.name ? 'Enter your Name' : ' '}
+                            fullWidth
+                            size='small'
+                            name='name'
+                            error={!valid.name}
+                            onChange={e => handleChange(e)}
+                        />
                     </Box>
-                    <Box mt='10px'>
+                    <Box mt='7px'>
                         <TextField
                             id="outlined-number"
                             label="Enter Email"
                             type="text"
                             variant="outlined"
-                            helperText={!values.email ? email.current === 'null' ? 'Enter email address' : 'Enter valid email address' : ' '}
+                            helperText={!valid.email ? values.email === '' ? 'Enter email address' : "Email address don't exist" : ' '}
                             fullWidth
                             size='small'
-                            error={!values.email}
-                            onChange={e => {email.current = e.target.value}}
+                            name='email'
+                            error={!valid.email}
+                            onChange={e => handleChange(e)}
                         />
                     </Box>
-                    <Box mt='10px'>
+                    <Box mt='7px'>
                         <TextField
-                            error={!values.pass}
+                            error={!valid.pass}
                             id="outlined-number"
                             label="Enter Password"
                             type="password"
                             variant="outlined"
-                            helperText='Use 8 or more characters with a mix of letters, numbers & symbols'
+                            helperText='Use 8 to 16 characters with a mix of letters, numbers & symbols'
                             fullWidth
                             size='small'
-                            onChange={e => {pass.current = e.target.value}}
+                            name='pass'
+                            onChange={e => handleChange(e)}
                         />
                     </Box>
-                    <Box mt='10px'>
+                    <Box mt='7px'>
                         <TextField
-                            error={!values.confirmPass}
+                            error={!valid.confirmPass}
                             id="outlined-number"
                             label="Confirm Password"
                             type="password"
                             variant="outlined"
-                            helperText={!values.confirmPass ? 'Enter Same Password' : ' '}
+                            helperText={!valid.confirmPass ? 'Enter Same Password' : ' '}
                             fullWidth
                             size='small'
-                            onChange={e => {confirmPass.current = e.target.value}}
+                            name='confirmPass'
+                            onChange={e => handleChange(e)}
                         />
                     </Box>
-                    <Box mb='10px'>
+                    <Box mb='7px' mt="-5px">
                         <FormControlLabel
                             control={
                             <Checkbox
                                 icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
                                 checkedIcon={<CheckBoxIcon color='primary' fontSize="small" />}
-                                name="checkedI"
-                                onChange={e => checked.current = e.target.checked}
+                                name="checked"
+                                onChange={e => handleChange(e)}
                             />
                             }
-                            label="By checking this, I agree all the terms and laws of agreement."
+                            label="I agree to the Laws and Agreement*"
                         />
-                        {!values.checked && <Typography variant="subtitle2" color='secondary'>Please check the above checkbox to continue</Typography>}
+                        {!valid.checked ? <Typography variant="caption" color='red' mt='-10px'>Please check the above checkbox to continue</Typography> : <Typography variant="caption" color='black' mt='-10px'>Check the box to continue</Typography>}
                     </Box>
                     <Box mb='25px'>
-                        <Button onClick={() => check()} size='large' variant='contained' className={classes.button} color='primary'>
+                        <Button onClick={() => handleCheck()} size='large' variant='contained' className={classes.button} color='primary'>
                             Sign in
                         </Button>
                     </Box>
                 </form>
-                <Box my='20px'>
-                    <Divider variant="middle" />
-                </Box>
-                <Box textAlign='center' mb='30px'>
-                    <Box mb='20px'>
-                        <Typography variant='h6'>or Sign up with...</Typography>
-                    </Box>
-                    <Button color="secondary" size='large' variant='contained' startIcon={<EmailIcon size='small' />} className={classes.button}>Google</Button>
-                </Box>
             </Box>
-            <Loading load={load} values={values} />
+            <Loading load={load} setLoad={setLoad} values={values} />
         </Box>
     )
 }

@@ -1,4 +1,4 @@
-import React, {  useState, useRef, useEffect } from 'react'
+import React, {  useState, useEffect } from 'react'
 import { makeStyles } from '@mui/styles';
 import { 
     Box, 
@@ -38,40 +38,58 @@ export const Login = () => {
     const theme = useTheme();
     const md = useMediaQuery(theme.breakpoints.up('md'));
     const sm = useMediaQuery(theme.breakpoints.up('sm'));
-
+    
     const regexId = /^((([a-zA-Z0-9\.]+)@([a-z]+)\.(([a-z]{2,5}\.[a-z]{2,3})|([a-z]{2,5})))|(\d{10}))/g
-    const regexPass = /^([a-zA-Z0-9\._\-@]{8,})/g
+    const regexPass = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,16}$/g
 
-    const id = useRef('null');
-    const pass = useRef('null');
     const [values, setValues] = useState({
+        id: '',
+        pass: '',
+        title: 0,
+        count: 0
+    });
+    
+    const [valid, setValid] = useState({
         id: true,
         pass: true,
-        count: 0,
-        title: 0
     });
 
-    const[load, setLoad] = useState(false)
+    const [load, setLoad] = useState(false)
 
-    useEffect(() => {
-        setLoad(regexPass.test(pass.current) && regexId.test(id.current))
-    }, [values])
-
-    const check = () => {
-        setValues({ 
-            pass: regexPass.test(pass.current), 
-            id: regexId.test(id.current),
-            count:values.count+1,
-            title: 0
+    const handleChange = e => {
+        setValues({
+            ...values,
+            [e.target.name]: e.target.value
         })
     }
+    
+    const handleCheck = () => {
+        setLoad(regexPass.test(values.pass) && regexId.test(values.id));
+        setValid({
+            pass: regexPass.test(values.pass), 
+            id: regexId.test(values.id),
+        })
+        setValues({
+            count: values.count + 1,
+        })
+    }
+
+    useEffect(() => {
+        if (values.count !== 0) {
+            setValid({
+                pass: regexPass.test(values.pass), 
+                id: regexId.test(values.id),
+            })
+        }
+    }, [values.pass, values.id])
+    
     return (
         <div>
             <Box>
-                <Typography variant={sm ? 'h4' : 'h5'}>Welcome Back!</Typography>
+                <Typography variant={sm ? 'h3' : 'h5'}>Welcome Back!</Typography>
             </Box>
             <Box mb='30px'>
-                <Typography variant={sm ? 'h6' : 'subtitle2'}>Log In to Your Account</Typography>
+                <Typography variant={sm ? 'h5' : 'subtitle2'}>Log In to Your Account</Typography>
             </Box>
             <Grid container alignItems="center">
                 <Grid item xs={12} md={6}>
@@ -83,25 +101,27 @@ export const Login = () => {
                                     label="Email or Phone Number"
                                     type="text"
                                     variant="outlined"
-                                    helperText={!values.id ? (id.current === 'null' ? 'Enter Email or Phone number' : 'Email or Phone Number is not registered') : ' '}
+                                    name='id'
+                                    helperText={!valid.id ? (values.id === '' ? 'Enter Email or Phone number' : 'Email or Phone Number is not registered') : ' '}
                                     fullWidth
                                     size='small'
                                     autoFocus
-                                    error={!values.id}
-                                    onChange={e => {id.current = e.target.value}}
+                                    error={!valid.id}
+                                    onChange={e => handleChange(e)}
                                 />
                             </Box>
                             <Box mt='10px'>
                                 <TextField
-                                    error={!values.pass}
+                                    error={!valid.pass}
                                     id="outlined-number"
                                     label="Password"
                                     type="password"
                                     variant="outlined"
-                                    helperText={!values.pass ? (pass.current === 'null' ? 'Enter Password' : 'Wrong password') : ' '}
+                                    name='pass'
+                                    helperText={!valid.pass ? (values.pass === '' ? 'Enter Password' : 'Wrong password') : ' '}
                                     fullWidth
                                     size='small'
-                                    onChange={e => {pass.current = e.target.value}}
+                                    onChange={e => handleChange(e)}
                                 />
                             </Box>
                             <Box mt='10px' display='flex' justifyContent='space-between' alignItems='center'>
@@ -122,7 +142,7 @@ export const Login = () => {
                                 </Box>
                             </Box>
                             <Box mt='4px'>
-                                <Button onClick={() => check()} size='large' variant='contained' className={classes.button} color='primary'>
+                                <Button onClick={e => handleCheck()} size='large' variant='contained' className={classes.button} color='primary'>
                                     Log in
                                 </Button>
                             </Box>
@@ -154,12 +174,12 @@ export const Login = () => {
                     </Box>
                 </Grid>
                 <Grid item xs={12}>
-                    <Box my='30px'>
+                    <Box mt='25px'>
                         <Typography variant='subtitle1'>Don't have an account? <Link className={classes.link} to='/sign-up'>Sign up</Link></Typography>
                     </Box>
                 </Grid>
             </Grid>
-            <Loading load={load} values={values} />
+            {load && <Loading load={load} setLoad={setLoad} values={values} />}
         </div>
     )
 }
