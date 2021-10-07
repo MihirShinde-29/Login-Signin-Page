@@ -44,7 +44,7 @@ function App() {
                   <Typography variant={sm ? 'h2' : 'h4'} color='secondary'>Website</Typography>
                 </Box>
               </Grid>
-              <Grid item height='60%'>
+              <Grid item height='68%'>
                 <Box textAlign='center' borderRadius={2} pt={sm ? '40px' : '25px'} pb='10px' px={sm ? '50px' : '20px'} className={classes.box} width={md ? '50vw' : '80vw'} height={md ? '90%' : ''}>
                   <Login />
                 </Box>
@@ -60,7 +60,7 @@ function App() {
                   <Typography variant={sm ? 'h2' : 'h4'} color='secondary'>Website</Typography>
                 </Box>
               </Grid>
-              <Grid item height='60%'>
+              <Grid item height='68%'>
                 <Box textAlign='center' borderRadius={2} pt={sm ? '40px' : '25px'} pb='10px' px={sm ? '50px' : '20px'} className={classes.box} width={md ? '50vw' : '80vw'} height={md ? '90%' : ''}>
                   <SignUp />
                 </Box>
